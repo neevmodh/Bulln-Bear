@@ -1,0 +1,110 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockSim Pro - Portfolio Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                📈 StockSim Pro
+            </div>
+            <nav>
+                <a href="index.html" class="active">Dashboard</a>
+                <a href="trade.html">Trade</a>
+                <a href="history.html">History</a>
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="insights.html">Analytics</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Portfolio Dashboard</h1>
+        
+        <!-- Data Structure Information -->
+        <div class="ds-info-card">
+            <h3>📊 Data Structures in Action</h3>
+            <div class="ds-grid">
+                <div class="ds-item">
+                    <span class="ds-badge">MAP</span>
+                    <p><strong>Portfolio Holdings:</strong> O(1) access to stock data by symbol</p>
+                </div>
+                <div class="ds-item">
+                    <span class="ds-badge">ARRAY</span>
+                    <p><strong>Transaction History:</strong> Sequential storage with efficient sorting</p>
+                </div>
+                <div class="ds-item">
+                    <span class="ds-badge">CIRCULAR BUFFER</span>
+                    <p><strong>Balance History:</strong> Fixed-size storage for performance</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Portfolio Summary -->
+        <div class="card">
+            <h2>Portfolio Summary <span class="ds-badge">MAP + ARRAY</span></h2>
+            <div class="grid grid-3">
+                <div>
+                    <h3>Cash Balance</h3>
+                    <p id="cashBalance" class="positive">Loading...</p>
+                </div>
+                <div>
+                    <h3>Stock Value</h3>
+                    <p id="stockValue">Loading...</p>
+                </div>
+                <div>
+                    <h3>Total Value</h3>
+                    <p id="totalValue" class="positive">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Holdings Table -->
+        <div class="card">
+            <h2>Current Holdings <span class="ds-badge">MAP</span></h2>
+            <table class="data-table" id="holdingsTable">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Quantity</th>
+                        <th>Avg Price</th>
+                        <th>Current Price</th>
+                        <th>Market Value</th>
+                        <th>P/L</th>
+                    </tr>
+                </thead>
+                <tbody id="holdingsBody">
+                    <!-- Dynamic content -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="card">
+            <h2>Recent Transactions <span class="ds-badge">ARRAY</span></h2>
+            <table class="data-table" id="recentTransactions">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Symbol</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionsBody">
+                    <!-- Dynamic content -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

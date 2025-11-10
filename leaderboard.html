@@ -1,0 +1,258 @@
+<!-- leaderboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockSim Pro - Leaderboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                📈 StockSim Pro
+            </div>
+            <nav>
+                <a href="index.html">Dashboard</a>
+                <a href="trade.html">Trade</a>
+                <a href="history.html">History</a>
+                <a href="leaderboard.html" class="active">Leaderboard</a>
+                <a href="insights.html">Analytics</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Global Leaderboard</h1>
+        
+        <!-- Data Structure Information -->
+        <div class="ds-info-card">
+            <h3>🏆 Advanced Ranking Algorithms</h3>
+            <div class="ds-grid">
+                <div class="ds-item">
+                    <span class="ds-badge">HEAP SORT</span>
+                    <p><strong>Efficient Ranking:</strong> O(n log n) sorting for large player datasets</p>
+                </div>
+                <div class="ds-item">
+                    <span class="ds-badge">PRIORITY QUEUE</span>
+                    <p><strong>Real-time Updates:</strong> Dynamic ranking with efficient reordering</p>
+                </div>
+                <div class="ds-item">
+                    <span class="ds-badge">SEARCH TREES</span>
+                    <p><strong>Fast Lookups:</strong> O(log n) player search and filtering</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- User Ranking Highlight -->
+        <div class="card user-ranking-card">
+            <div class="card-header">
+                <h2>Your Ranking</h2>
+                <div class="ranking-badge" id="userRankBadge">#-</div>
+            </div>
+            <div class="grid grid-4">
+                <div class="ranking-metric">
+                    <div class="metric-icon">🥇</div>
+                    <div class="metric-info">
+                        <h3>Current Rank</h3>
+                        <p id="userRank" class="ranking-value">-</p>
+                    </div>
+                </div>
+                <div class="ranking-metric">
+                    <div class="metric-icon">💰</div>
+                    <div class="metric-info">
+                        <h3>Portfolio Value</h3>
+                        <p id="userValue" class="ranking-value">Loading...</p>
+                    </div>
+                </div>
+                <div class="ranking-metric">
+                    <div class="metric-icon">📈</div>
+                    <div class="metric-info">
+                        <h3>Daily Change</h3>
+                        <p id="dailyChange" class="ranking-value">+0.00%</p>
+                    </div>
+                </div>
+                <div class="ranking-metric">
+                    <div class="metric-icon">⚡</div>
+                    <div class="metric-info">
+                        <h3>Performance</h3>
+                        <p id="performance" class="ranking-value">Neutral</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Controls -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Leaderboard Controls</h2>
+                <span class="ds-badge">PRIORITY QUEUE + HEAP SORT</span>
+            </div>
+            <div class="grid grid-4">
+                <div class="form-group">
+                    <label for="leaderboardType">Ranking Type</label>
+                    <select id="leaderboardType" class="form-control" onchange="leaderboardManager.updateLeaderboard()">
+                        <option value="TOTAL_VALUE">Total Portfolio Value</option>
+                        <option value="DAILY_GAIN">Daily Gain %</option>
+                        <option value="TOTAL_GAIN">Total Gain %</option>
+                        <option value="TRADING_VOLUME">Trading Volume</option>
+                        <option value="RISK_ADJUSTED">Risk-Adjusted Return</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="timeFrame">Time Frame</label>
+                    <select id="timeFrame" class="form-control" onchange="leaderboardManager.updateLeaderboard()">
+                        <option value="ALL_TIME">All Time</option>
+                        <option value="DAILY">Today</option>
+                        <option value="WEEKLY">This Week</option>
+                        <option value="MONTHLY">This Month</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="searchPlayer">Search Player</label>
+                    <div class="search-wrapper">
+                        <input type="text" id="searchPlayer" class="form-control" placeholder="Search players..." oninput="leaderboardManager.searchPlayers()">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="riskFilter">Risk Level</label>
+                    <select id="riskFilter" class="form-control" onchange="leaderboardManager.updateLeaderboard()">
+                        <option value="ALL">All Levels</option>
+                        <option value="LOW">Low Risk</option>
+                        <option value="MEDIUM">Medium Risk</option>
+                        <option value="HIGH">High Risk</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Table -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Global Rankings</h2>
+                <div class="leaderboard-info">
+                    <span class="live-badge">LIVE</span>
+                    <span class="update-time" id="lastUpdate">Updating...</span>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table leaderboard-table" id="leaderboardTable">
+                    <thead>
+                        <tr>
+                            <th width="80">Rank</th>
+                            <th>Player</th>
+                            <th>Portfolio Value</th>
+                            <th>Daily Change</th>
+                            <th>Total Gain</th>
+                            <th>Trades</th>
+                            <th>Risk Level</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="leaderboardPagination" class="pagination">
+                <!-- Pagination will be generated here -->
+            </div>
+        </div>
+
+        <!-- Statistics and Charts -->
+        <div class="grid grid-2">
+            <!-- Statistics -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Leaderboard Statistics</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalPlayers">0</div>
+                        <div class="stat-label">Total Players</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="averagePortfolio">$0</div>
+                        <div class="stat-label">Average Portfolio</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="top10Value">$0</div>
+                        <div class="stat-label">Top 10% Value</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="userPercentile">-</div>
+                        <div class="stat-label">Your Percentile</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Distribution -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Performance Distribution</h2>
+                </div>
+                <div class="chart-container">
+                    <canvas id="distributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Performers -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Top Performers This Week</h2>
+            </div>
+            <div class="top-performers">
+                <div class="performer-card gold">
+                    <div class="performer-rank">🥇</div>
+                    <div class="performer-avatar">👑</div>
+                    <div class="performer-info">
+                        <h3>Warren Buffett</h3>
+                        <p>+12.4% ($184,230)</p>
+                    </div>
+                    <div class="performer-change positive">+12.4%</div>
+                </div>
+                <div class="performer-card silver">
+                    <div class="performer-rank">🥈</div>
+                    <div class="performer-avatar">💎</div>
+                    <div class="performer-info">
+                        <h3>Cathie Wood</h3>
+                        <p>+9.8% ($92,150)</p>
+                    </div>
+                    <div class="performer-change positive">+9.8%</div>
+                </div>
+                <div class="performer-card bronze">
+                    <div class="performer-rank">🥉</div>
+                    <div class="performer-avatar">🚀</div>
+                    <div class="performer-info">
+                        <h3>Ray Dalio</h3>
+                        <p>+7.2% ($134,567)</p>
+                    </div>
+                    <div class="performer-change positive">+7.2%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Profile Modal -->
+    <div id="playerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Player Profile</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="playerDetails">
+                    <!-- Player details will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="leaderboard.js"></script>
+</body>
+</html>

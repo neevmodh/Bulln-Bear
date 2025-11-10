@@ -1,0 +1,273 @@
+<!-- insights.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockSim Pro - Portfolio Analytics</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                📈 StockSim Pro
+            </div>
+            <nav>
+                <a href="index.html">Dashboard</a>
+                <a href="trade.html">Trade</a>
+                <a href="history.html">History</a>
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="insights.html" class="active">Analytics</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Portfolio Analytics & Insights</h1>
+        
+        <!-- Data Structure Information -->
+        <div class="ds-info-card">
+            <h3>📊 Advanced Analytics Algorithms</h3>
+            <div class="ds-grid">
+                <div class="ds-item">
+                    <span class="ds-badge">CIRCULAR BUFFER</span>
+                    <p><strong>Time Series Data:</strong> Efficient storage of historical balance data</p>
+                </div>
+                <div class="ds-item">
+                    <span class="ds-badge">STATISTICAL ANALYSIS</span>
+                    <p><strong>Risk Metrics:</strong> Standard deviation, Sharpe ratio, and VaR calculations</p>
+                </div>
+                <div class="ds-item">
+                    <span class="ds-badge">CORRELATION MATRIX</span>
+                    <p><strong>Portfolio Analysis:</strong> O(n²) correlation calculations for diversification</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Key Metrics -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Portfolio Overview</h2>
+                <span class="ds-badge">DATA ANALYSIS</span>
+            </div>
+            <div class="grid grid-4">
+                <div class="metric-card">
+                    <div class="metric-icon">📈</div>
+                    <div class="metric-info">
+                        <h3>Total Return</h3>
+                        <p id="totalReturn" class="positive">+0.00%</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">🌊</div>
+                    <div class="metric-info">
+                        <h3>Volatility</h3>
+                        <p id="volatility" class="neutral">Low</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">⚖️</div>
+                    <div class="metric-info">
+                        <h3>Sharpe Ratio</h3>
+                        <p id="sharpeRatio" class="neutral">0.00</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">β</div>
+                    <div class="metric-info">
+                        <h3>Beta</h3>
+                        <p id="beta" class="neutral">1.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <!-- Portfolio Value Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Portfolio Value Over Time</h2>
+                    <span class="ds-badge">CIRCULAR BUFFER</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="portfolioChart"></canvas>
+                </div>
+                <div class="chart-controls">
+                    <label>Time Frame: </label>
+                    <select id="chartTimeFrame" onchange="insightsManager.updateCharts()" class="form-control">
+                        <option value="1W">1 Week</option>
+                        <option value="1M">1 Month</option>
+                        <option value="3M">3 Months</option>
+                        <option value="1Y">1 Year</option>
+                        <option value="ALL">All Time</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Asset Allocation -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Asset Allocation</h2>
+                </div>
+                <div class="chart-container">
+                    <canvas id="allocationChart"></canvas>
+                </div>
+                <div class="allocation-stats">
+                    <div class="allocation-item">
+                        <span class="allocation-color" style="background: #10b981"></span>
+                        <span>Cash: <strong id="cashPercentage">0%</strong></span>
+                    </div>
+                    <div class="allocation-item">
+                        <span class="allocation-color" style="background: #3b82f6"></span>
+                        <span>Stocks: <strong id="stockPercentage">0%</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <!-- Performance vs Benchmark -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Performance vs S&P 500</h2>
+                </div>
+                <div class="chart-container">
+                    <canvas id="benchmarkChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Risk Analysis -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Risk Analysis</h2>
+                </div>
+                <div class="chart-container">
+                    <canvas id="riskChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Analytics -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Advanced Analytics</h2>
+                <span class="ds-badge">STATISTICAL ANALYSIS</span>
+            </div>
+            <div class="grid grid-3">
+                <div class="analytics-section">
+                    <h3>Correlation Matrix</h3>
+                    <div id="correlationMatrix" class="correlation-matrix">
+                        <div class="matrix-placeholder">
+                            <div class="placeholder-icon">🔄</div>
+                            <p>Correlation analysis</p>
+                            <small>Calculating stock relationships...</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="analytics-section">
+                    <h3>Value at Risk (VaR)</h3>
+                    <div class="var-display">
+                        <div class="var-value" id="varValue">-$0</div>
+                        <div class="var-label">95% Confidence</div>
+                        <div class="var-description">
+                            Maximum expected loss over 1 day
+                        </div>
+                    </div>
+                </div>
+                <div class="analytics-section">
+                    <h3>Portfolio Efficiency</h3>
+                    <div class="efficiency-display">
+                        <div class="efficiency-score" id="efficiencyScore">0%</div>
+                        <div class="efficiency-label">Efficiency Score</div>
+                        <div class="efficiency-bar">
+                            <div class="efficiency-fill" id="efficiencyFill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trading Insights -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Trading Behavior Insights</h2>
+            </div>
+            <div class="grid grid-2">
+                <div class="insights-section">
+                    <h3>Best Performing Stocks</h3>
+                    <table class="data-table performance-table">
+                        <thead>
+                            <tr><th>Symbol</th><th>Return</th><th>Contribution</th></tr>
+                        </thead>
+                        <tbody id="bestPerformers">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="insights-section">
+                    <h3>Trading Patterns</h3>
+                    <div class="patterns-grid">
+                        <div class="pattern-item">
+                            <div class="pattern-icon">📅</div>
+                            <div class="pattern-info">
+                                <div class="pattern-label">Most Active Day</div>
+                                <div class="pattern-value" id="mostActiveDay">-</div>
+                            </div>
+                        </div>
+                        <div class="pattern-item">
+                            <div class="pattern-icon">💵</div>
+                            <div class="pattern-info">
+                                <div class="pattern-label">Average Trade Size</div>
+                                <div class="pattern-value" id="avgTradeSize">-</div>
+                            </div>
+                        </div>
+                        <div class="pattern-item">
+                            <div class="pattern-icon">🎯</div>
+                            <div class="pattern-info">
+                                <div class="pattern-label">Win Rate</div>
+                                <div class="pattern-value" id="winRate">-</div>
+                            </div>
+                        </div>
+                        <div class="pattern-item">
+                            <div class="pattern-icon">📊</div>
+                            <div class="pattern-info">
+                                <div class="pattern-label">Profit Factor</div>
+                                <div class="pattern-value" id="profitFactor">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="card">
+            <div class="card-header">
+                <h2>AI-Powered Recommendations</h2>
+                <span class="ai-badge">AI</span>
+            </div>
+            <div id="recommendations" class="recommendations-grid">
+                <div class="recommendation-item">
+                    <div class="recommendation-header">
+                        <span class="recommendation-icon">💡</span>
+                        <strong>Diversification Opportunity</strong>
+                    </div>
+                    <p>Consider adding more technology stocks to balance your portfolio. Current allocation to tech is below optimal levels.</p>
+                </div>
+                <div class="recommendation-item">
+                    <div class="recommendation-header">
+                        <span class="recommendation-icon">⚠️</span>
+                        <strong>Risk Alert</strong>
+                    </div>
+                    <p>Your portfolio shows high concentration in a few stocks. Consider diversifying to reduce unsystematic risk.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="insights.js"></script>
+</body>
+</html>

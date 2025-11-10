@@ -1,0 +1,238 @@
+<!-- history.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockSim - Transaction History</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                📈 StockSim Pro
+            </div>
+            <nav>
+                <a href="index.html">Dashboard</a>
+                <a href="trade.html">Trade</a>
+                <a href="history.html" class="active">History</a>
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="insights.html">Analytics</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Transaction History & Analysis</h1>
+        
+        <!-- Data Structure Information -->
+        <div class="ds-info-card">
+            <h3>📚 Data Structures in History Management</h3>
+            <div class="ds-grid">
+                <div class="ds-item">
+                    <span class="ds-badge">ARRAY</span>
+                    <p><strong>Transaction Storage:</strong> Sequential storage with efficient filtering O(n)</p>
+                </div>
+                <div class="ds-item">
+                    <span class="ds-badge">MERGE SORT</span>
+                    <p><strong>Sorting Algorithm:</strong> O(n log n) efficient sorting for large datasets</p>
+                </div>
+                <div class="ds-item">
+                    <span class="ds-badge">SEARCH</span>
+                    <p><strong>Real-time Search:</strong> Linear search with O(n) complexity</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filters and Controls -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Filters & Search</h2>
+                <span class="ds-badge">ARRAY METHODS</span>
+            </div>
+            <div class="grid grid-3">
+                <div class="form-group">
+                    <label for="searchSymbol">Search Symbol</label>
+                    <div class="search-wrapper">
+                        <input type="text" id="searchSymbol" class="form-control" placeholder="e.g., AAPL">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="transactionType">Transaction Type</label>
+                    <select id="transactionType" class="form-control">
+                        <option value="ALL">All Types</option>
+                        <option value="BUY">Buy</option>
+                        <option value="SELL">Sell</option>
+                        <option value="UNDO">Undo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="dateRange">Date Range</label>
+                    <select id="dateRange" class="form-control">
+                        <option value="ALL">All Time</option>
+                        <option value="TODAY">Today</option>
+                        <option value="WEEK">This Week</option>
+                        <option value="MONTH">This Month</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="btn btn-primary" onclick="historyManager.applyFilters()">
+                    <span class="btn-icon">🔍</span>
+                    Apply Filters
+                </button>
+                <button class="btn btn-secondary" onclick="historyManager.clearFilters()">
+                    <span class="btn-icon">🗑️</span>
+                    Clear Filters
+                </button>
+                <button class="btn btn-warning" onclick="historyManager.exportToCSV()">
+                    <span class="btn-icon">📊</span>
+                    Export CSV
+                </button>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Transaction Statistics</h2>
+            </div>
+            <div class="grid grid-4">
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-info">
+                        <h3>Total Transactions</h3>
+                        <p id="totalTransactions" class="positive">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚖️</div>
+                    <div class="stat-info">
+                        <h3>Buys vs Sells</h3>
+                        <p id="buySellRatio">0:0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-info">
+                        <h3>Most Traded</h3>
+                        <p id="mostTraded">-</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-info">
+                        <h3>Total Volume</h3>
+                        <p id="totalVolume">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Transaction History</h2>
+                <span class="ds-badge">ARRAY + MERGE SORT</span>
+            </div>
+            <div class="table-controls">
+                <div class="sort-control">
+                    <label>Sort by: </label>
+                    <select id="sortBy" onchange="historyManager.sortTransactions()" class="form-control">
+                        <option value="DATE_DESC">Date (Newest First)</option>
+                        <option value="DATE_ASC">Date (Oldest First)</option>
+                        <option value="SYMBOL">Symbol</option>
+                        <option value="TYPE">Type</option>
+                        <option value="AMOUNT_DESC">Amount (High to Low)</option>
+                    </select>
+                </div>
+                <div class="results-info">
+                    Showing <span id="resultsCount">0</span> of <span id="totalResults">0</span> transactions
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="transactionsTable">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Type</th>
+                            <th>Symbol</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="paginationControls" class="pagination">
+                <!-- Pagination will be generated here -->
+            </div>
+        </div>
+
+        <!-- Trading Patterns -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Trading Patterns</h2>
+                <span class="ds-badge">DATA ANALYSIS</span>
+            </div>
+            <div class="grid grid-2">
+                <div class="pattern-section">
+                    <h3>Activity Heatmap</h3>
+                    <div id="heatmap" class="heatmap-container">
+                        <div class="heatmap-placeholder">
+                            <div class="heatmap-icon">🔥</div>
+                            <p>Heatmap visualization</p>
+                            <small>Most active: Monday mornings</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="pattern-section">
+                    <h3>Performance Summary</h3>
+                    <div class="performance-stats">
+                        <div class="perf-stat">
+                            <span class="perf-label">Win Rate</span>
+                            <span class="perf-value positive">65.2%</span>
+                        </div>
+                        <div class="perf-stat">
+                            <span class="perf-label">Avg Hold Time</span>
+                            <span class="perf-value">3.2 days</span>
+                        </div>
+                        <div class="perf-stat">
+                            <span class="perf-label">Best Performer</span>
+                            <span class="perf-value positive">NVDA (+24.5%)</span>
+                        </div>
+                        <div class="perf-stat">
+                            <span class="perf-label">Total Commission</span>
+                            <span class="perf-value">$42.50</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Details Modal -->
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Transaction Details</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="transactionDetails">
+                    <!-- Details will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="history.js"></script>
+</body>
+</html>
